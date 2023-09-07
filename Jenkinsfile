@@ -6,7 +6,7 @@ pipeline {
         
         steps{
             
-          echo 'Hello - merging pr2 to main hello'
+          echo 'Hello - testing pr to triger build in jenkins'
            
             
         }
