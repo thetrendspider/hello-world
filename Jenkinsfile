@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     stages {
-      stage('SonarQube analysis') {
+      stage('Hello steps') {
         
         steps{
             
-          sh 'Hello World'
+          echo 'Hello World'
            
             
         }
