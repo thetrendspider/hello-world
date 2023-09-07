@@ -6,7 +6,7 @@ pipeline {
         
         steps{
             
-          echo 'Hello - merging pr to main hello'
+          echo 'Hello - merging pr1 to main hello'
            
             
         }
