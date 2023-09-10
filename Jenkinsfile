@@ -6,7 +6,7 @@ pipeline {
         
         steps{
             
-          echo 'Hello - its a demo call'
+          echo 'Hi - its a demo call'
            
             
         }
