@@ -6,7 +6,7 @@ pipeline {
         
         steps{
             
-          echo 'Hello - testing pr to triger build in jenkins'
+          echo 'Hello - its a demo call'
            
             
         }
