@@ -19,7 +19,7 @@ pipeline {
 
         stage('Terraform Plan') {
             when {
-        expression { currentBuild.changeSets.any { it.branch == 'origin/master' } && currentBuild.changeSets.any { it.originObject instanceof hudson.model.ChangeLogSet$Entry } }
+        expression { currentBuild.changeSets.any { it.branch == 'origin/main' } && currentBuild.changeSets.any { it.originObject instanceof hudson.model.ChangeLogSet$Entry } }
     }
             steps {
                 
