@@ -19,9 +19,8 @@ pipeline {
 
         stage('Terraform Plan') {
             when {
-                // Only run this stage on pull requests targeting the master branch
-                expression { currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) == null }
-            }
+        expression { currentBuild.changeSets.any { it.branch == 'origin/main' } && currentBuild.changeSets.any { it.originObject instanceof hudson.model.ChangeLogSet$Entry } }
+    }
             steps {
                 
                     echo 'terraform plan'
