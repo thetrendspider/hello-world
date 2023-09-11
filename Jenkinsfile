@@ -1,17 +1,38 @@
 pipeline {
     agent any
-
     stages {
-      stage('Hello steps') {
         
-        steps{
-            
-          echo 'Hi - its a demo call - open'
-           
-            
+
+        stage('Terraform Init') {
+            steps {
+                
+                    echo 'terraform init'
+                
+            }
         }
-  
-        
-        } 
+
+        stage('Terraform Plan') {
+            when {
+                // Only run this stage on pull requests targeting the master branch
+                expression { currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) == null }
+            }
+            steps {
+                
+                    echo 'terraform plan'
+               
+            }
+        }
+
+        stage('Terraform Apply') {
+            when {
+                // Only run this stage when changes are merged into the master branch
+                expression { currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) != null }
+            }
+            steps {
+                
+                    echo 'terraform apply -auto-approve'
+                
+            }
+        }
     }
 }
