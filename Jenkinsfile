@@ -2,7 +2,13 @@ pipeline {
     agent any
     stages {
         
-
+        stage('Welcome to testing') {
+            steps {
+                
+                    echo 'welcome to testing'
+                
+            }
+        }
         stage('Terraform Init') {
             steps {
                 
