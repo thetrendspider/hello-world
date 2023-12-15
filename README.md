@@ -1,50 +1,84 @@
-# ECS Task Restart Runbook
+# Deploying a Flask API and MySQL Server on Kubernetes
 
-## Overview
-This runbook provides step-by-step instructions to restart a task in Amazon ECS.
+This repository contains code to deploy a MySQL server on a Kubernetes cluster, attach a persistent volume for data persistence, and deploy a Flask API for managing users in the MySQL database.
 
 ## Prerequisites
-1. AWS CLI installed and configured with appropriate IAM permissions.
-2. ECS task definition and cluster already set up.
 
-## Procedure
+Ensure you have the following installed:
+- Docker
+- Kubernetes CLI (kubectl)
+- Minikube (https://kubernetes.io/docs/tasks/tools/)
 
-### 1. Identify the ECS Cluster and Task to Restart
-   - Log in to the AWS Management Console.
-   - Navigate to the ECS service.
-   - Identify the ECS cluster and task that you want to restart.
+## Getting Started
 
-### 2. Stop the Running Task
-   - Open a terminal or command prompt.
-   - Execute the following AWS CLI command to stop the running task:
-     ```bash
-     aws ecs stop-task --cluster YOUR_CLUSTER_NAME --task YOUR_TASK_ID
-     ```
+1. **Clone the repository.**
 
-### 3. Verify the Task Stopped
-   - Check the ECS console or use the following AWS CLI command to verify that the task has stopped:
-     ```bash
-     aws ecs describe-tasks --cluster YOUR_CLUSTER_NAME --tasks YOUR_TASK_ID
-     ```
-   - Ensure that the task state is `STOPPED`.
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
 
-### 4. Start a New Task
-   - Execute the following AWS CLI command to start a new task using the same task definition:
-     ```bash
-     aws ecs run-task --cluster YOUR_CLUSTER_NAME --task-definition YOUR_TASK_DEFINITION
-     ```
+2. **Configure Docker to use the Docker daemon in your Kubernetes cluster.**
 
-### 5. Monitor the New Task
-   - Monitor the ECS console or use the following AWS CLI command to check the status of the new task:
-     ```bash
-     aws ecs describe-tasks --cluster YOUR_CLUSTER_NAME --tasks NEW_TASK_ID
-     ```
+    ```bash
+    eval $(minikube docker-env)
+    ```
 
-### 6. Verify the Restart
-   - Confirm that the new task is running successfully, and the application is operational.
+3. **Pull the latest MySQL image from Dockerhub.**
 
-## Additional Notes
-- Ensure that the ECS task definition and associated resources are properly configured.
-- Review ECS and ECS Task documentation for more advanced configurations.
+    ```bash
+    docker pull mysql
+    ```
 
+4. **Build a Kubernetes API image with the Dockerfile in this repo.**
 
+    ```bash
+    docker build . -t flask-api
+    ```
+
+## Secrets
+
+Kubernetes Secrets are used to store sensitive information. Follow these steps to set up a password for the MySQL root user:
+
+1. **Encode your password in the terminal.**
+
+    ```bash
+    echo -n super-secret-password | base64
+    ```
+
+2. **Add the output to the `flaskapi-secrets.yml` file at the `db_root_password` field.**
+
+## Deployments
+
+1. **Add the secrets to your Kubernetes cluster.**
+
+    ```bash
+    kubectl apply -f flaskapi-secrets.yml
+    ```
+
+2. **Create the persistent volume and persistent volume claim for the database.**
+
+    ```bash
+    kubectl apply -f mysql-pv.yml
+    ```
+
+3. **Create the MySQL deployment.**
+
+    ```bash
+    kubectl apply -f mysql-deployment.yml
+    ```
+
+4. **Create the Flask API deployment.**
+
+    ```bash
+    kubectl apply -f flaskapp-deployment.yml
+    ```
+
+Check the status of the pods, services, and deployments.
+
+## Creating Database and Schema
+
+Connect to the MySQL database to set up the database and table using the following commands:
+
+```bash
+kubectl run -it --rm --image=mysql --restart=Never mysql-client -- mysql --host mysql --password=<super-secret-password>
