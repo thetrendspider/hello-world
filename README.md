@@ -1,4 +1,4 @@
-# Deploying a Flask API and MySQL server on Kubernetes
+# Deploying a Client Flask API and MySQL server on Kubernetes
 
 This repo contains code that 
 1) Deploys a MySQL server on a Kubernetes cluster
@@ -9,10 +9,9 @@ This repo contains code that
 1. Have `Docker` and the `Kubernetes CLI` (`kubectl`) installed together with `Minikube` (https://kubernetes.io/docs/tasks/tools/)
 
 ## Getting started
-1. Clone the repository
-2. Configure `Docker` to use the `Docker daemon` in your kubernetes cluster via your terminal: `eval $(minikube docker-env)`
-3. Pull the latest mysql image from `Dockerhub`: `Docker pull mysql`
-4. Build a kubernetes-api image with the Dockerfile in this repo: `Docker build . -t flask-api`
+1. Configure `Docker` to use the `Docker daemon` in your kubernetes cluster via your terminal: `eval $(minikube docker-env)`
+2. Pull the latest mysql image from `Dockerhub`: `docker pull mysql`
+3. Build a kubernetes-api image with the Dockerfile in this repo: `docker build . -t flask-api`
 
 ## Secrets
 `Kubernetes Secrets` can store and manage sensitive information. For this example we will define a password for the
